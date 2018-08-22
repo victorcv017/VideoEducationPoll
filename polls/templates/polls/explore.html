@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h2>Bienvenido {{user.username|title}}</h2>
+    <a href="{% url 'polls:myvideos'  %}">Mis Videos</a> /
+    <a href="{% url 'polls:explore' 1  %}">Explorar</a><br/>
+    {% if category_list %}
+        <table border="1">
+            <thead>
+                <th>Categorias</th>
+                <th>Video</th>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        {% for category in category_list %}
+                        <div>
+                            <a href="{% url 'polls:explore' category.id %}">{{category.name}}</a>
+                        </div>
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% if video_list %}
+                            {% for video in video_list %}
+                                <a href="{% url 'polls:video' video.id %}">{{video.name}}</a>
+                            {% endfor %}
+                        {% else %}
+                        <p>No se encontraron videos de esa categoria</p>
+                        {% endif %}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}

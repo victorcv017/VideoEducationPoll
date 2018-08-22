@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>{% block title %}Simple is Better Than Complex{% endblock %}</title>
+    {%  block stylesheets %}{% endblock %}
+</head>
+
+<body>
+    <header>
+        <h2>Play</h2>
+        {% if user.is_authenticated %}
+        <a href="{% url 'polls:logout' %}">logout</a>
+        {% else %}
+        <a href="{% url 'polls:login' %}">login</a> /
+        <a href="{% url 'polls:signup' %}">signup</a>
+        {% endif %}
+        <hr>
+    </header>
+    <main>
+        {% block content %} {% endblock %}
+    </main>
+    {% block javascripts %}{% endblock %}
+</body>
+
+</html>

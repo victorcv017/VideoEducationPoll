@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+<div>
+    <input type="text" value="{{video.name}}">
+    <button>Compartir</button>
+</div>
+<video tabindex="-1" class="video-stream html5-main-video" webkit-playsinline="" playsinline="" controlslist="nodownload"
+    style="width: 672px; height: 376px; left: 0px; top: 1.05px;" src="https://www.youtube.com/watch?v=hM6DYAf6kl0">
+</video>
+<video width="320" height="240" controls>
+    <source src="" type="video/mp4">
+</video>
+
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{% static 'polls/tabs.css' %}">
+{% endblock %}
+{% block content %}
+    <h2>Bienvenido {{user.username|title}}</h2>
+    <a href="{% url 'polls:myvideos'  %}">Mis Videos</a> / 
+    <a href="{% url 'polls:explore' 1  %}">Explorar</a><br/>
+    {% if video_list %}
+    <table border="1">
+        <thead>
+            <th>Video</th>
+            <th>Reproducciones</th>
+            <th>Respuestas</th>
+            <th>&nbsp;</th>
+        </thead>
+        <tbody>
+            {% for video in video_list %}
+            <tr>
+                <td>
+                    <a href="{% url 'polls:video' video.id %}">{{video.name}}</a>
+                </td>
+                <td>{{video.responses}}</td>
+                <td>{{video.views}}</td>
+                <td>more</td>
+            </tr>
+    
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>Aún no ha creado ningún video.</p>
+    {% endif %}
+    
+
+    
+{% endblock %}
+
+{% block javascripts%}
+        <script src="{% static 'polls/jquery.min.js' %}"></script>
+        <script src="{% static 'polls/tabs.js' %}"></script>
+{% endblock %}
+
