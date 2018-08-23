@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
+
 class Video(models.Model):
     name = models.CharField(max_length=200, default="Sin Titulo")
     duration = models.IntegerField()
@@ -16,6 +17,9 @@ class Video(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
 
+    def __str__(self):
+        return self.name
+
 
 class Category(models.Model):
     name = models.CharField(max_length=200)
@@ -25,19 +29,26 @@ class Category(models.Model):
 class QuestionType(models.Model):
     name = models.CharField(max_length=200)
 
+    def __str__(self):
+        return self.name
+
 class Question(models.Model):
     title = models.CharField(max_length=200)
-    time = models.IntegerField()
-    points = models.IntegerField(default=0)
-    correctAnswers = models.CharField(max_length=200, null=True)
+    minutes = models.IntegerField(default=0)
+    seconds = models.IntegerField(default=0)
+    points = models.IntegerField(default=1)
+    correctAnswers = models.CharField(max_length=200,blank=True, null=True)
     video = models.ForeignKey(Video, on_delete=models.CASCADE)
     type = models.ForeignKey(QuestionType, on_delete=models.CASCADE)
+    
 
 
 class Answer(models.Model):
     text = models.CharField(max_length=200)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
-    user = models.ManyToManyField(User)
+    #user = models.ManyToManyField(User)
+
+    
 
 
 

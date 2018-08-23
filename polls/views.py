@@ -4,9 +4,11 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
 from django.views import generic
+from pprint import pprint
+import json
 
-from .models import Video, Category
-from .forms import SignUpForm
+from .models import Video, Category, QuestionType, Question, Answer
+from .forms import SignUpForm, QuestionForm
 
 def index(request):
     return HttpResponse("Hello, world. You're at the polls index.")
@@ -51,10 +53,35 @@ class ExploreView(generic.ListView):
         return Category.objects.order_by('name')
     
 
-   
-class VideoView(generic.DetailView):
-    model = Video
-    template_name = 'polls/video.html'
+
+def video(request,video_id):
+    video = get_object_or_404(Video, pk=video_id)
+    types = QuestionType.objects.order_by('name')
+    questions = Question.objects.filter(video=video_id)
+    data = ""
+    text = ""
+    if request.method == 'POST':
+        form = QuestionForm(request.POST)
+        data = json.loads(request.POST.get('data'))
+        correct = request.POST.get('ansradio')
+        for answer in data:
+            ans = Answer.objects.create(text = answer['value'], question = form.save())
+            text = ans
+            #ans.save()
+        #if form.is_valid():
+            #form.save()
+    else:
+        form = QuestionForm()
+    return render(request, 'polls/video.html', 
+    {
+        'video' : video,
+        'types' : types,
+        'form' : form,
+        'questions' : questions,
+        'text' : text
+    
+    })
+
 
 class WatchVideoView(generic.DetailView):
     model = Video

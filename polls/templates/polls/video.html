@@ -1,12 +1,141 @@
 {% extends 'base.html' %}
 {% load embed_video_tags %}
 {% load static %} 
+{% block stylesheets%}
+<link rel="stylesheet" type="text/css" href="{% static 'polls/plyr.css' %}">
+<style>
+    .container {
+        max-width: 500px;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <div>
     <input type="text" value="{{video.name}}">
     <button>Compartir</button>
 </div>
-<video width="400" controls>
-    <source src="{% get_media_prefix %}{{video.id}}.mp4" type="video/mp4">
-</video>
+{{text}}
+<div class="container">
+    <div id="player" data-plyr-provider="youtube" data-plyr-embed-id="{{video.link}}"></div>
+</div>
+<div>
+    <button  id="new" type="button">Nueva pregunta</button>
+</div>
+<form id="createQuestion" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit"  id="send" value="Guardar">
+    
+    <input hidden id="data" name="data">
+    <div id="question">
+    
+    </div>
+    <button hidden id="more">Mas</button>
+</form>
+<div>
+    {% if questions %}
+    <table>
+        <thead>
+            <th>Minutos</th>
+            <th>Segundos</th>
+            <th>Titulo</th>
+            <th>Tipo</th>
+            <tbody>
+                {% for question in questions %}
+                <tr>
+                    <td>
+                        {{question.minutes}}
+                    </td>
+                    <td>
+                        {{question.seconds}}
+                    </td>
+                    <td>
+                        {{question.title}}
+                    </td>
+                    <td>
+                        {{question.type}}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </thead>
+    </table>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block javascripts %}
+
+<script src="{% static 'polls/plyr.js' %}"></script>
+<script>
+    $(document).ready(function () {
+        $("#id_video").val({{video.id}});
+
+        $("#id_video").hide();
+    });
+    var rq = 1;
+    const player = new Plyr('#player', {
+        invertTime: false
+        
+        });
+    $("#new").click(function(){
+        $("#createQuestion").show();
+    });
+
+    $("#id_type").change(function(){
+        switch (Number(this.value)){
+            case 2:
+                console.log("Multiple");
+                $("#question").append("<div><input value='" + rq + "' type='radio' id='" + rq + "' class='removable ' name='ansradio'><label class='editable' for='" + rq++ + "' contenteditable='true'>Escriba su respuesta</label><button type='button' onclick='remove(this)'>Eliminar</button><br></div>");
+                $("#more").show();
+                break;
+            case 3:
+                console.log("Free");
+                $("#question").empty();
+                $("#more").hide();
+                break;
+        }
+
+    });
+    
+
+    $("#more").click(function(e){
+        e.preventDefault();
+        $("#question").append("<div><input value='" + rq + "' type='radio' id='" + rq + "' class='removable' name='ansradio'><label class='editable' for='" + rq++ + "' contenteditable='true'>Escriba su respuesta</label><button type='button' onclick='remove(this)'>Eliminar</button><br></div>");
+    });
+
+    function remove(e){
+        $(e).parent().remove();
+    }
+    
+    $('#createQuestion').submit(function () {
+        console.log($("#question").children());
+        var data = [];
+        //console.log($("#question").children());
+        $("#question").children().each(function () {
+            var obj = {};
+            obj.id = $(this).find('input').val();
+            obj.value = $(this).find('label').text();
+            data.push(obj);
+        });
+        $("#data").val(JSON.stringify(data));
+        console.log($("#data").val());
+            
+    });
+    
+    $("#send").click(function(){
+        var data = [];
+        //console.log($("#question").children());
+        $("#question").children().each(function(){
+            var obj = {};
+            obj.id = $(this).find('input').val();
+            obj.value = $(this).find('label').text();
+            data.push(obj);
+        });
+        $("#data").val(JSON.stringify(data));
+        console.log($("#data").val());
+       // console.log(JSON.parse(data));
+    });
+</script>
 {% endblock %}

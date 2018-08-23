@@ -10,6 +10,6 @@ urlpatterns = [
     path('signup', views.signup, name='signup'),
     path('myvideos', views.MyVideosView.as_view(), name='myvideos'),
     path('explore/category/<int:category_id>', views.ExploreView.as_view(), name='explore'),
-    path('myvideos/video/<int:pk>', views.VideoView.as_view(), name='video'),
+    path('myvideos/video/<int:video_id>', views.video, name='video'),
     path('watch/video/<int:pk>', views.WatchVideoView.as_view(), name='watch')
 ]

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-
+{% load static %}
 <head>
     <meta charset="utf-8">
     <title>{% block title %}Simple is Better Than Complex{% endblock %}</title>
@@ -21,7 +21,9 @@
     <main>
         {% block content %} {% endblock %}
     </main>
+    <script src="{% static 'polls/jquery.min.js' %}"></script>
     {% block javascripts %}{% endblock %}
+    
 </body>
 
 </html>
