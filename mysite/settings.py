@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'embed_video'
 ]
 
 MIDDLEWARE = [
@@ -120,4 +121,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 LOGIN_REDIRECT_URL = '/polls/myvideos'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'polls/media')
+MEDIA_URL = '/media/'
 
