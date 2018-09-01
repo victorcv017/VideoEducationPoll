@@ -5,13 +5,13 @@ from django.contrib.auth.models import User
 
 class Video(models.Model):
     name = models.CharField(max_length=200, default="Sin Titulo")
-    duration = models.IntegerField()
+    duration = models.IntegerField(blank= True , null= True)
     likes = models.IntegerField(default=0)
     dislikes = models.IntegerField(default=0)
     link = models.CharField(max_length=200,blank = True, null = True)
     views = models.IntegerField(default=0)
     start = models.IntegerField(default=0)
-    end = models.IntegerField()
+    end = models.IntegerField(blank=True,null=True)
     responses = models.IntegerField(default=0)
     total_points = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -46,6 +46,9 @@ class Question(models.Model):
 class Answer(models.Model):
     text = models.CharField(max_length=200)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.text
     #user = models.ManyToManyField(User)
 
     

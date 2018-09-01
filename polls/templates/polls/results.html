@@ -1,0 +1,21 @@
+{% extends 'base.html' %} 
+{% load static %}
+{% block content %}
+<h2>Gracias por usar Play</h2>
+
+{% if answerable %}
+    Tu puntuacion fue de : {{score}}
+{% else %}
+    Tus respuestas fueron enviadas a tu tutor, pronto recibiras la respuesta con tu puntuación
+{% endif %}
+
+<canvas id="tetris" width="240" height="400">
+    Your browser does not support the HTML5 canvas tag.
+</canvas>
+
+{% endblock %}
+
+{% block javascripts %}
+<script src="{% static 'polls/tetris.js' %}"></script>
+        
+{% endblock %}

@@ -2,7 +2,10 @@
 {% block content %}
     <h2>Bienvenido {{user.username|title}}</h2>
     <a href="{% url 'polls:myvideos'  %}">Mis Videos</a> /
-    <a href="{% url 'polls:explore' 1  %}">Explorar</a><br/>
+    <a href="{% url 'polls:explore' 1  %}">Explorar</a>/
+    <a href="{% url 'polls:create'   %}">Crear</a>
+    <br/>
+    
     {% if category_list %}
         <table border="1">
             <thead>
@@ -21,7 +24,7 @@
                     <td>
                         {% if video_list %}
                             {% for video in video_list %}
-                                <a href="{% url 'polls:video' video.id %}">{{video.name}}</a>
+                                <a href="{% url 'polls:watch' video.id %}">{{video.name}}</a>
                             {% endfor %}
                         {% else %}
                         <p>No se encontraron videos de esa categoria</p>

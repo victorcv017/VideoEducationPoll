@@ -1,1 +1,106 @@
-{{ video.name }}
+{% extends 'base.html' %}
+{% load embed_video_tags %}
+{% load static %} 
+{% block stylesheets%}
+<link rel="stylesheet" type="text/css" href="{% static 'polls/plyr.css' %}">
+<style>
+    .container {
+        max-width: 500px;
+    }
+</style>
+{% endblock %} 
+{% block content %}
+<h1>{{video.name}}</h1>
+<div class="container">
+    <div id="player" data-plyr-provider="youtube" data-plyr-embed-id="{{video.link}}"></div>
+</div>
+<div id="question">
+
+</div>
+{{post}} <br>
+{{data}}
+{% if questions %}
+    <form name="results" id="results"  hidden action="" method="post">
+         {% csrf_token %}
+        <label> Han terminado las preguntas puedes seguir viendo el video o enviar las respuestas dando clic en el boton</label>
+        <input type="submit" value="Enviar respuestas"> 
+        <input id="score" type="text" name="score" value="0"> 
+        <input id="answerable" type="text" name="answerable" value="true"> 
+    </form>
+    {% for question in questions %}
+        <form id="{{question.id}}"  hidden time="{{question.time}}" cans="{{question.correctAnswers}}" points="{{question.points}}">
+            <input type=text class="data" name="{{question.id}}" hidden value="">
+            <div>
+                {{question.title}}<br>
+                    {% if question.type.name == "Free" %} 
+                        <input type="text" name="text" placeholder="Escriba su respuesta aqui">
+                    {% else %}
+                    
+                        {% for answer in question.answers %}
+                            <input type="radio" value="{{answer.id}}" name="{{question.id}}">{{answer}}<br>
+                        {% endfor %}
+                    {% endif %}
+            </div>
+
+            <button type="button" form="{{question.id}}" onclick="save(this)">Guardar</button>
+            
+        </form>
+    {% endfor %}
+{% endif %}
+{% endblock %} 
+{% block javascripts %}
+
+<script src="{% static 'polls/plyr.js' %}"></script>
+<script>
+    var qs= 0, score = 0, socreable = true;
+    const player = new Plyr('#player', {
+        invertTime: false
+        
+    });
+    var times = {{times}};
+    var maptimes = {{maptimes}};
+    player.on('timeupdate', event => {
+        if(times.includes(parseInt(player.currentTime))){
+            player.pause();
+            time = parseInt(player.currentTime);
+            //console.log(maptimes[time]);
+            //console.log($("#"+maptimes[time]));
+            $("#" + maptimes[time]).show();
+        }
+    });
+
+    function save(e){
+        //var data = $(this).attr('form').serialize();
+        var id = $(e).attr('form');
+        var data = $("#" + id).serialize();
+        //console.log(data);
+        if(!isNaN($("#" + id).attr('cans'))){
+            var answer = $("#" + id).find('input:checked').val();
+            if(answer == $("#" + id).attr('cans')){
+                score += Number($("#" + id).attr('points'));
+            }
+            
+            console.log("score = " + score);
+        }else {
+            scoreable = false;
+            $("#answerable").val(false);
+        }
+        console.log($("#" + id).attr('cans'));
+        $("#" + id).hide();
+        $("#" + id).find('input.data').val(data);
+        $("#results").append($("#" + id).find('input.data'));
+        if(parseInt(player.currentTime)=={{max}}){
+            $("#results").show();
+        }
+        qs++;
+        player.forward(1);
+        player.play();
+        $("#score").val(score);
+
+    }
+
+    player.on('ended', event => {
+        $("#results").show();
+    });
+</script>
+ {% endblock %}

@@ -6,14 +6,13 @@
 {% block content %}
     <h2>Bienvenido {{user.username|title}}</h2>
     <a href="{% url 'polls:myvideos'  %}">Mis Videos</a> / 
-    <a href="{% url 'polls:explore' 1  %}">Explorar</a><br/>
+    <a href="{% url 'polls:explore' 1  %}">Explorar</a> / 
+    <a href="{% url 'polls:create'   %}">Crear</a><br/> 
     {% if video_list %}
     <table border="1">
         <thead>
             <th>Video</th>
             <th>Reproducciones</th>
-            <th>Respuestas</th>
-            <th>&nbsp;</th>
         </thead>
         <tbody>
             {% for video in video_list %}
@@ -22,8 +21,6 @@
                     <a href="{% url 'polls:video' video.id %}">{{video.name}}</a>
                 </td>
                 <td>{{video.responses}}</td>
-                <td>{{video.views}}</td>
-                <td>more</td>
             </tr>
     
             {% endfor %}

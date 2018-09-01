@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.forms import ModelForm
-from .models import Question
+from .models import Question, Video
 
 QUESTION_CHOICES = (
     ('3', 'Free'),
@@ -21,6 +21,14 @@ class SignUpForm(UserCreationForm):
         model = User
         fields = ('username', 'first_name', 'last_name',
                   'email', 'password1', 'password2', )
+        labels = {
+            'username' : 'Usuario',
+            'first_name' : 'Nombre',
+            'last_name' : 'Apellidos',
+            'email' : 'Correo',
+            'password1' : 'Contraseña',
+            'password2' : 'Confirmar Contraseña'
+        }
 
 
 class QuestionForm(ModelForm):
@@ -34,4 +42,14 @@ class QuestionForm(ModelForm):
             'points': 'Puntaje',
             'type': 'Tipo de Pregunta',
             'video': ''
+        }
+
+
+class VideoForm(ModelForm):
+    class Meta:
+        model = Video
+        fields = ['name', 'link']
+        labels = {
+            'name': 'Titulo del Video',
+            'link' : 'Link de Youtube',
         }

@@ -12,17 +12,18 @@
 
 {% block content %}
 <div>
-    <input type="text" value="{{video.name}}">
-    <button>Compartir</button>
+    <input type="text" readonly value="{{video.name}}">
+    <button share="true" onclick="share(this)">Compartir</button><br>
 </div>
 {{text}}
+{{correct}}
 <div class="container">
     <div id="player" data-plyr-provider="youtube" data-plyr-embed-id="{{video.link}}"></div>
 </div>
 <div>
     <button  id="new" type="button">Nueva pregunta</button>
 </div>
-<form id="createQuestion" method="post">
+<form id="createQuestion" hidden method="post">
     {% csrf_token %}
     {{ form }}
     <input type="submit"  id="send" value="Guardar">
@@ -137,5 +138,11 @@
         console.log($("#data").val());
        // console.log(JSON.parse(data));
     });
+
+    function share(e){
+        if($(e).attr('share') == "true" )
+            $(e).parent().append("Copia en enlace para compartir<br><p>http://127.0.0.1:8000/polls/watch/video/{{video.id}}</p>")
+        $(e).attr('share',false)
+    }
 </script>
 {% endblock %}

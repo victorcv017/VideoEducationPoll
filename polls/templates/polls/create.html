@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Bienvenido {{user.username|title}}</h2>
+<p> Para crear un video simplemente agrega la url de YouTube,el nombre del video</p>
+{{t}}
+<form method="post" a="{{t}}">
+    {% csrf_token %} 
+    {{ form }}
+    <input type="submit" id="send" value="Guardar">
+</form>
+{% endblock %}
