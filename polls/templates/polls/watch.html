@@ -24,8 +24,8 @@
          {% csrf_token %}
         <label> Han terminado las preguntas puedes seguir viendo el video o enviar las respuestas dando clic en el boton</label>
         <input type="submit" value="Enviar respuestas"> 
-        <input id="score" type="text" name="score" value="0"> 
-        <input id="answerable" type="text" name="answerable" value="true"> 
+        <input id="score" hidden type="text" name="score" value="0"> 
+        <input id="answerable" hidden type="text" name="answerable" value="true"> 
     </form>
     {% for question in questions %}
         <form id="{{question.id}}"  hidden time="{{question.time}}" cans="{{question.correctAnswers}}" points="{{question.points}}">
